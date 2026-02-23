@@ -94,14 +94,21 @@ pub struct BellmanFordResult<'a> {
 impl BellmanFordResult<'_> {
     pub fn show_distances(&self) {
         println!("Distancias desde el nodo fuente:");
-        for (node, distance) in &self.distances {
+        let mut distances_keys: Vec<&str> = self.distances.keys().map(|k| *k).collect();
+        distances_keys.sort();
+        for node in distances_keys {
+            let distance = self.distances.get(&node).unwrap();
             println!("{}: {}", node, distance);
         }
     }
 
     pub fn show_predecessors(&self) {
         println!("Predecesores de cada nodo:");
-        for (node, predecessor) in &self.predecessors {
+        let mut predecessors_keys: Vec<&str> = self.predecessors.keys().map(|k| *k).collect();
+        predecessors_keys.sort();
+
+        for node in predecessors_keys {
+            let predecessor = self.predecessors.get(&node).unwrap();
             let pred_str = match predecessor {
                 Some(p) => format!("{}", p),
                 None => String::from("Source"),
@@ -124,6 +131,50 @@ impl BellmanFordResult<'_> {
             }
         }
 }
+
+impl BellmanFordResult<'_> {
+    pub fn show_distances_horizontal(&self) {
+        println!("Distancias desde el nodo fuente:");
+        let mut nodes: Vec<&str> = self.distances.keys().map(|k| *k).collect();
+        nodes.sort();
+
+        // Mostrar nodos en una fila
+        for node in &nodes {
+            print!("{:<10}", node); // ancho fijo de 10 caracteres
+        }
+        println!();
+
+        // Mostrar distancias en la fila siguiente
+        for node in &nodes {
+            let distance = self.distances.get(node).unwrap();
+            print!("{:<10}", distance);
+        }
+        println!("\n");
+    }
+
+    pub fn show_predecessors_horizontal(&self) {
+        println!("Predecesores de cada nodo:");
+        let mut nodes: Vec<&str> = self.predecessors.keys().map(|k| *k).collect();
+        nodes.sort();
+
+        // Mostrar nodos
+        for node in &nodes {
+            print!("{:<10}", node);
+        }
+        println!();
+
+        // Mostrar predecesores
+        for node in &nodes {
+            let pred_str = match self.predecessors.get(node).unwrap() {
+                Some(p) => format!("{}", p),
+                None => String::from("Source"),
+            };
+            print!("{:<10}", pred_str);
+        }
+        println!("\n");
+    }
+}
+
 #[derive(Debug)]
 pub struct BellmanFordTable<'a> {
     pub iteration: usize,

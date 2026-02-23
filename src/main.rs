@@ -22,8 +22,8 @@ fn ex1() {
 
     let result = g.bellman_ford("R1");
     g.plot("ejercicio1.dot").unwrap();
-    result.show_distances();
-    result.show_predecessors();
+    result.show_distances_horizontal();
+    result.show_predecessors_horizontal();
 }
 
 fn ex2() {
@@ -39,6 +39,6 @@ fn ex2() {
 
     let result = g.bellman_ford("R1");
     g.plot("ejercicio2.dot").unwrap();
-    result.show_distances();    
-    result.show_predecessors();
+    result.show_distances_horizontal();    
+    result.show_predecessors_horizontal();
 }

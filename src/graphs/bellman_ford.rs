@@ -34,10 +34,9 @@ impl Graph {
                     distances.insert(v, distances[u] + edge.weight);
                     predecessors.insert(v, Some(u));
                 }
-
-                let table = BellmanFordTable::new(i, distances.clone(), predecessors.clone());
-                tables.push(table);
             }
+            let table = BellmanFordTable::new(i, distances.clone(), predecessors.clone());
+            tables.push(table);
         }
 
         // Detección ciclo negativo

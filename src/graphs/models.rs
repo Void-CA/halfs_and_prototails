@@ -195,18 +195,34 @@ impl<'a> BellmanFordTable<'a> {
 impl<'a> fmt::Display for BellmanFordTable<'a> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "Iteration: {}", self.iteration)?;
-        writeln!(f, "{:<10} | {:<10} | {:<15}", "Node", "Distance", "Predecessor")?;
-        writeln!(f, "{:-<10}-+-{:-<10}-+-{:-<15}", "", "", "")?;
-        // Para mantener el mismo orden, iteramos sobre las claves de distances
-        for node in self.distances.keys() {
+
+        // Tomamos las llaves y las ordenamos
+        let mut nodes: Vec<&str> = self.distances.keys().map(|k| *k).collect();
+        nodes.sort();
+
+        // Cabecera: nombres de nodos
+        for node in &nodes {
+            write!(f, "{:<10}", node)?;
+        }
+        writeln!(f)?;
+
+        // Distancias
+        for node in &nodes {
             let distance = self.distances.get(node).unwrap();
-            let predecessor = self.predecessors.get(node).unwrap();
-            let pred_str = match predecessor {
+            write!(f, "{:<10}", distance)?;
+        }
+        writeln!(f)?;
+
+        // Predecesores
+        for node in &nodes {
+            let pred_str = match self.predecessors.get(node).unwrap() {
                 Some(p) => format!("{}", p),
                 None => String::from("None"),
             };
-            writeln!(f, "{:<10} | {:<10} | {:<15}", node, distance, pred_str)?;
+            write!(f, "{:<10}", pred_str)?;
         }
+        writeln!(f)?;
+
         Ok(())
     }
 }
